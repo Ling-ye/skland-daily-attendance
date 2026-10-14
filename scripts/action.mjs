@@ -4,6 +4,12 @@ import process from 'node:process'
 import * as core from '@actions/core'
 import waitOn from 'wait-on'
 
+// Unset optional GitHub Secrets arrive as empty strings and override Nitro defaults.
+for (const key of Object.keys(process.env)) {
+  if (key.startsWith('SKLAND_') && !process.env[key])
+    delete process.env[key]
+}
+
 const PORT = process.env.NITRO_PORT || 3000
 const HOST = process.env.NITRO_HOST || 'localhost'
 const BASE_URL = `http://${HOST}:${PORT}`

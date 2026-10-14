@@ -6,7 +6,7 @@ import { useStorage } from 'nitro/storage'
 import { defineTask } from 'nitro/task'
 import { createClient } from 'skland-kit'
 import { createContext } from 'unctx'
-import { attendCharacter, createMessageCollector, generateAttendanceKey, getSplitByComma } from '~/utils/index'
+import { attendCharacter, createMessageCollector, formatAccountError, generateAttendanceKey, getSplitByComma } from '~/utils/index'
 
 interface GameStats {
   gameName: string
@@ -210,7 +210,7 @@ export default defineTask<'success' | 'failed'>({
         }
         catch (error) {
           const { stats, messageCollector } = useAttendanceContext()
-          const errorMessage = error instanceof Error ? error.message : String(error)
+          const errorMessage = formatAccountError(error, tokens)
           messageCollector.notify(`\n--- 账号 ${accountNumber}/${tokens.length} ---`)
           messageCollector.infoError(`处理失败: ${errorMessage}`)
           hasFailed = true
